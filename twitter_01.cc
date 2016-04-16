@@ -7,15 +7,12 @@ using namespace std;
 
 const int dim=256;
 const int est=4;
-const int formato_data=8;
 
-void concatena (const char a[], const char estensione[], char c[], int len_a);
-
-
+void concatena (const char a[], const char estensione[], char c[], int len_a, int len_b);
 
 int main (int argc, char* argv[]){
-    
-    
+
+
     fstream my_in, my_out;          //i due stream: input e output su file
     char hashtag[dim];              //dichiaro la stringa hashtag
     char tema[dim];                //è file da cui prendo hashtags
@@ -24,73 +21,69 @@ int main (int argc, char* argv[]){
     char estensione[]=".txt";
     char input[dim];
     char scelta;
-    
-    
-    /*
-    if (argc!=3){
-        cout<< "Sintassi: ./a.out <input> <output>\n";
-        exit(0);
-    }*/
-    
+    char vuoto[]="";
+      char universita[]="uni";
+      char politicatrentina[]="poltn";
+      char scuoladipolitiche[]="sdp";
+
     cout<<"Ciao e benvenuto!\n";
     cout<<"Che giorno è oggi?\n";
-    
-    
+
     cout<<"Metti: ggmmaaaa\n";            //inserimento data
     cin >>data;
-    
-    cout<<"Quale tema di hashtag desideri?";    //quale tema degli hashtags
+
+    cout<<"Quale tema di hashtag desideri?\n";    //quale tema degli hashtags
     cout<<"Digita 'u' per hashtags su università, \n    't' per per hashtags su politica trentina, \n     's'     per hashtags su Scuola di Politiche \n";
     cin >> scelta;
-    
+
     switch (scelta) {
-        case 'u': char tema[]="uni";
+        case 'u': concatena(vuoto,universita,tema,strlen(vuoto),strlen(universita));
             break;
-        case 't': tema[]="poltn";
+        case 't': concatena(vuoto,politicatrentina,tema,strlen(vuoto),strlen(politicatrentina));
             break;
-        case 's': tema[]="sdp";
+        case 's': concatena(vuoto,scuoladipolitiche,tema,strlen(vuoto),strlen(scuoladipolitiche));
+            break;
         default: cout << "Errore nella compilazione\n";
             break;
     }
-    
-    
-    concatena(data,estensione,output,strlen(data));
-    
-    concatena(tema,estensione,input,strlen(tema));
-    
-    
-    
+
+cout << tema << endl;
+
+    concatena(tema,estensione,input,strlen(tema),strlen(estensione)+1);
+    concatena(data,estensione,output,strlen(data),strlen(estensione)+1);
+
+cout << input << endl;
+cout << output << endl;
+
+
     my_in.open(input, ios::in);
     my_out.open(output, ios::out);
-    
+
     while (my_in>>hashtag) {
-        
+
         if (hashtag[0]=='#'){
             my_out << hashtag << endl;
         }
     }
-    
-    
+
     my_in.close();
     my_out.close();
-    
 
-    
 }
 
-
-void concatena (const char a[], const char estensione[], char c[], int len_a){
+/*
+concatena(vuoto,politicatrentina,tema,strlen(vuoto),strlen(politicatrentina));
+char vuoto[]="";
+char politicatrentina[]="poltn";
+*/
+void concatena (const char a[], const char b[], char c[], int len_a, int len_b){
     for (int i=0; i<len_a;i++)
         c[i]=a[i];
-    for (int i=0; i<est;i++)
-        c[i+len_a]=estensione[i];
-    
+    for (int i=0; i<len_b;i++)
+        c[i+len_a]=b[i];
 }
 
-
-
-
-/*TODO
+/*TOdo
 
 0.1far vedere i temi di hashtag per scegliere con 1 lettera
 0.2far aggiungere gli hashtag da un file che contiene già un tweet da pubblicare
@@ -98,4 +91,6 @@ void concatena (const char a[], const char estensione[], char c[], int len_a){
 0.4 mettere procedura di saluto su file.h
 0.5 fare procedura apposita per aggiungere il .txt alla data
 0.6 creare possibilità di riscrivere il tema scelto
+0.7 fare pulizzia di variabili inutili
+0.8 fare controllo per immissioni dati da linea di comando
 */
