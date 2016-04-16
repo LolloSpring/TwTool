@@ -2,6 +2,8 @@
 #include <iostream>
 #include <fstream>
 #include <cstring>
+#include <cstdlib>
+
 
 using namespace std;
 
@@ -13,13 +15,15 @@ void concatena (const char a[], const char estensione[], char c[], int len_a, in
 int main (int argc, char* argv[]){
 
 
-    fstream my_in, my_out,my_app;          //i due stream: input e output su file
+    fstream my_in_bozza, my_in_tema, my_out;          //i due stream: input e output su file
+    char c;
     char hashtag[dim];              //dichiaro la stringa hashtag
     char tema[dim];                //è file da cui prendo hashtags
     char output[dim];               //è file di uscita del tweet;
     char data[dim];                 //questa è la data
     char estensione[]=".txt";
-    char input[dim];
+    //char input[dim];
+    char input[]="uni.txt";
     char scelta;
     char vuoto[]="";
       char universita[]="uni";
@@ -33,36 +37,58 @@ int main (int argc, char* argv[]){
     cin >>data;
 
     cout<<"Quale tema di hashtag desideri?\n";    //quale tema degli hashtags
-    cout<<"Digita 'u' per hashtags su università, \n    't' per per hashtags su politica trentina, \n     's'     per hashtags su Scuola di Politiche \n";
+   cout<<"Digita 'u' per hashtags su università, \n    't' per per hashtags su politica trentina, \n     's'     per hashtags su Scuola di Politiche \n";
     cin >> scelta;
 
     switch (scelta) {
-        case 'u': concatena(vuoto,universita,tema,strlen(vuoto),strlen(universita));
+        case 'u':
+        strcpy(tema,universita);
             break;
-        case 't': concatena(vuoto,politicatrentina,tema,strlen(vuoto),strlen(politicatrentina));
+        case 't':
+        strcpy(tema,politicatrentina);
             break;
-        case 's': concatena(vuoto,scuoladipolitiche,tema,strlen(vuoto),strlen(scuoladipolitiche));
+        case 's':
+        strcpy(tema,scuoladipolitiche);
             break;
         default: cout << "Errore nella compilazione\n";
             break;
     }
+cout << tema << endl;
 
-    concatena(tema,estensione,input,strlen(tema),strlen(estensione)+1);
+    strcat(tema,estensione);
+    strcpy(input,tema);
+
+    concatena(data,estensione,output,strlen(data),strlen(estensione)+1);
+
 
 cout << input << endl;
+cout << output << endl;
 
-    my_in.open(input, ios::in);
-    my_app.open(argv[1], ios::out|ios::app);
 
-    while (my_in>>hashtag) {
+    my_in_bozza.open(argv[1],ios::in);
+    my_out.open(output, ios::out|ios::app);
 
-        if (hashtag[0]=='#'){
-            my_app << hashtag << endl;
+
+//copio carattere per carattere il tweet bozza
+    while (my_in_bozza.get(c)) {
+        my_out.put(c);
+      }
+
+    my_in_bozza.close();
+
+
+//aggiungo hashtags tematici al tweet
+    my_in_tema.open(input, ios::in);
+        while (my_in_tema>>hashtag) {
+
+            if (hashtag[0]=='#'){
+                my_out << hashtag << " ";
+            }
         }
-    }
 
-    my_in.close();
-    my_app.close();
+    my_in_tema.close();
+
+    my_out.close();
 
 }
 
@@ -80,6 +106,7 @@ void concatena (const char a[], const char b[], char c[], int len_a, int len_b){
 
 /*TOdo
 
+0.1far vedere i temi di hashtag per scegliere con 1 lettera
 0.2far aggiungere gli hashtag da un file che contiene già un tweet da pubblicare
 0.3 mettere tutti i messaggi di benvenuto in una procedura unica di saluto.
 0.4 mettere procedura di saluto su file.h
