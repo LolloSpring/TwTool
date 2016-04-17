@@ -17,10 +17,15 @@ int main (int argc, char* argv[]){
     char estensione[]=".txt";
     char scelta;
     char vuoto[]="";
-
       char universita[]="uni";
       char politicatrentina[]="pol";
       char scuoladipolitiche[]="sdp";
+
+
+if (argc!=2){
+  cerr << "Attenzione: inserire: a./.out <filetxt>\n";
+  exit(0);
+}
 
     saluto ();
 
@@ -81,7 +86,6 @@ cout << output << endl;
 
 /*TOdo
 
-0.5 fare pulizia di variabili inutili
 0.6 fare controllo per immissioni dati da linea di comando
 0.7 mettere i temi degli hashtag su un file esterno
 0.8 mettere azione di aggiunta di un tema con hashtag specifici
